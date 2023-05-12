@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 import os
 import shutil
 import subprocess
@@ -16,7 +17,7 @@ from pydantic import BaseModel
 from typing_extensions import Annotated
 from starlette.responses import RedirectResponse
 from chains.local_doc_qa import LocalDocQA
-from configs.model_config import (VS_ROOT_PATH, UPLOAD_ROOT_PATH, EMBEDDING_DEVICE,
+from configs.model_config import (API_UPLOAD_ROOT_PATH, EMBEDDING_DEVICE,UPLOAD_ROOT_PATH,VS_ROOT_PATH,
                                   EMBEDDING_MODEL, LLM_MODEL, NLTK_DATA_PATH,
                                   VECTOR_SEARCH_TOP_K, LLM_HISTORY_LEN, OPEN_CROSS_DOMAIN)
 
@@ -218,6 +219,7 @@ async def chat(
         ),
 ):
     vs_path = os.path.join(VS_ROOT_PATH, knowledge_base_id)
+
     if not os.path.exists(vs_path):
         raise ValueError(f"Knowledge base {knowledge_base_id} not found")
 
@@ -251,11 +253,16 @@ async def no_knowledge_chat(
             ],
         ),
 ):
-
-    for resp, history in local_doc_qa._call(
+    for resp, history in local_doc_qa.get_no_knowledge_based_answer(
             query=question, chat_history=history, streaming=True
     ):
         pass
+    return ChatMessage(
+        question=question,
+        response=resp["result"],
+        history=history,
+        source_documents=resp["source_documents"],
+    )
 
 async def stream_chat(websocket: WebSocket, knowledge_base_id: str):
     await websocket.accept()
@@ -308,7 +315,7 @@ def main():
     global local_doc_qa
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--port", type=int, default=7861)
+    parser.add_argument("--port", type=int, default=7860)
     args = parser.parse_args()
 
     app = FastAPI()

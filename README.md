@@ -31,27 +31,12 @@
 ## 硬件需求
 
 - ChatGLM-6B 模型硬件需求
-
-    注：如未将模型下载至本地，请执行前检查`$HOME/.cache/huggingface/`文件夹剩余空间，模型文件下载至本地需要 15 GB 存储空间。
-
-    模型下载方法可参考 [常见问题](docs/FAQ.md) 中 Q8。
   
     | **量化等级**   | **最低 GPU 显存**（推理） | **最低 GPU 显存**（高效参数微调） |
     | -------------- | ------------------------- | --------------------------------- |
     | FP16（无量化） | 13 GB                     | 14 GB                             |
     | INT8           | 8 GB                     | 9 GB                             |
     | INT4           | 6 GB                      | 7 GB                              |
-
-- MOSS 模型硬件需求
-    
-    注：如未将模型下载至本地，请执行前检查`$HOME/.cache/huggingface/`文件夹剩余空间，模型文件下载至本地需要 70 GB 存储空间
-
-    模型下载方法可参考 [常见问题](docs/FAQ.md) 中 Q8。
-
-    | **量化等级**  | **最低 GPU 显存**（推理） | **最低 GPU 显存**（高效参数微调） |
-    |-------------------|-----------------------| --------------------------------- |
-    | FP16（无量化） | 68 GB             | -                     |
-    | INT8      | 20 GB          | -                     |
 
 - Embedding 模型硬件需求
 
@@ -122,6 +107,8 @@ $ pnpm i
 $ npm run dev
 ```
 
+注：如未将模型下载至本地，请执行前检查`$HOME/.cache/huggingface/`文件夹剩余空间，至少15G。
+
 执行后效果如下图所示：
 1. `对话` Tab 界面
 ![](img/webui_0510_0.png)
@@ -187,7 +174,6 @@ Web UI 可以实现如下功能：
   - [x] [THUDM/chatglm-6b-int4](https://huggingface.co/THUDM/chatglm-6b-int4)
   - [x] [THUDM/chatglm-6b-int4-qe](https://huggingface.co/THUDM/chatglm-6b-int4-qe)
   - [x] [ClueAI/ChatYuan-large-v2](https://huggingface.co/ClueAI/ChatYuan-large-v2)
-  - [x] [fnlp/moss-moon-003-sft](https://huggingface.co/fnlp/moss-moon-003-sft)
 - [ ] 增加更多 Embedding 模型支持
   - [x] [nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)
   - [x] [nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)

@@ -110,7 +110,14 @@ async function onConversation() {
     const lastText = ''
     const fetchChatAPIOnce = async () => {
       const res = active.value
-        ? await chatfile({ message })
+        ? await chatfile({
+        	"knowledge_base_id":"kb1",
+  				"question": message,
+  				"history": [[
+      			"工伤保险是什么？",
+      			"工伤保险是指用人单位按照国家规定，为本单位的职工和用人单位的其他人员，缴纳工伤保险费，由保险机构按照国家规定的标准，给予工伤保险待遇的社会保险制度。"
+    			]]
+         })
         : await chat({
           question: message,
           history: [[
@@ -118,7 +125,7 @@ async function onConversation() {
             '工伤保险是指用人单位按照国家规定，为本单位的职工和用人单位的其他人员，缴纳工伤保险费，由保险机构按照国家规定的标准，给予工伤保险待遇的社会保险制度。',
           ]],
         })
-      const result = active.value ? res.data.response.text : res.data.response
+      const result = active.value ? res.data.response : res.data.response
       updateChat(
         +uuid,
         dataSources.value.length - 1,

@@ -29,7 +29,6 @@ llm_model_dict = {
     "chatglm-6b-int4": "THUDM/chatglm-6b-int4",
     "chatglm-6b-int8": "THUDM/chatglm-6b-int8",
     "chatglm-6b": "THUDM/chatglm-6b",
-    "moss": "fnlp/moss-moon-003-sft",
 }
 
 # LLM model name
@@ -47,9 +46,6 @@ USE_PTUNING_V2 = False
 
 # LLM running device
 LLM_DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-
-# MOSS load in 8bit
-LOAD_IN_8BIT = True
 
 VS_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "vector_store")
 
@@ -91,3 +87,7 @@ flagging username: {FLAG_USER_NAME}
 # 是否开启跨域，默认为False，如果需要开启，请设置为True
 # is open cross domain
 OPEN_CROSS_DOMAIN = False
+
+API_UPLOAD_ROOT_PATH = "/home/mw/temp"
+UPLOAD_ROOT_PATH = "/home/mw/temp"
+VS_ROOT_PATH = "content"

@@ -11,9 +11,9 @@ export const chat = (params: any) => {
 
 export const chatfile = (params: any) => {
   return api({
-    url: '/chatfile',
+    url: '/chat-docs/chat',
     method: 'post',
-    data: qs.stringify(params),
+    data: JSON.stringify(params),
   })
 }
 

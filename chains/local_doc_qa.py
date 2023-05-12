@@ -1,6 +1,7 @@
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.document_loaders import UnstructuredFileLoader
+from models.chatglm_llm import ChatGLM
 from configs.model_config import *
 import datetime
 from textsplitter import ChineseTextSplitter
@@ -21,7 +22,7 @@ def load_file(filepath, sentence_size=SENTENCE_SIZE):
         loader = UnstructuredFileLoader(filepath, mode="elements")
         docs = loader.load()
     elif filepath.lower().endswith(".pdf"):
-        loader = UnstructuredFileLoader(filepath, strategy="fast")
+        loader = UnstructuredFileLoader(filepath)
         textsplitter = ChineseTextSplitter(pdf=True, sentence_size=sentence_size)
         docs = loader.load_and_split(textsplitter)
     else:
@@ -118,6 +119,9 @@ class LocalDocQA:
     chunk_conent: bool = True
     score_threshold: int = VECTOR_SEARCH_SCORE_THRESHOLD
 
+    def _call(self, query: str, chat_history: List, streaming: bool):
+        return self.llm._call(prompt=query, history=chat_history, streaming=streaming)
+
     def init_cfg(self,
                  embedding_model: str = EMBEDDING_MODEL,
                  embedding_device=EMBEDDING_DEVICE,
@@ -128,12 +132,7 @@ class LocalDocQA:
                  use_ptuning_v2: bool = USE_PTUNING_V2,
                  use_lora: bool = USE_LORA,
                  ):
-        if llm_model.startswith('moss'):
-            from models.moss_llm import MOSS
-            self.llm = MOSS()
-        else:
-            from models.chatglm_llm import ChatGLM
-            self.llm = ChatGLM()
+        self.llm = ChatGLM()
         self.llm.load_model(model_name_or_path=llm_model_dict[llm_model],
                             llm_device=llm_device, use_ptuning_v2=use_ptuning_v2, use_lora=use_lora)
         self.llm.history_len = llm_history_len
@@ -176,7 +175,7 @@ class LocalDocQA:
                 if len(failed_files) > 0:
                     logger.info("以下文件未能成功加载：")
                     for file in failed_files:
-                        logger.info(f"{file}\n")
+                        logger.info(file, end="\n")
 
         else:
             docs = []
@@ -246,6 +245,20 @@ class LocalDocQA:
             response = {"query": query,
                         "result": result,
                         "source_documents": related_docs_with_score}
+            yield response, history
+            torch_gc()
+
+    def get_no_knowledge_based_answer(self, query, chat_history=[], streaming: bool = STREAMING):
+        prompt = query
+
+        for result, history in self.llm._call(prompt=prompt,
+                                              history=chat_history,
+                                              streaming=streaming):
+            torch_gc()
+            history[-1][0] = query
+            response = {"query": query,
+                        "result": result,
+                        "source_documents": ["none", "none"]}
             yield response, history
             torch_gc()
 
