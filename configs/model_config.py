@@ -52,10 +52,15 @@ VS_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "vector_
 UPLOAD_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "content")
 
 # 基于上下文的prompt模版，请务必保留"{question}"和"{context}"
-PROMPT_TEMPLATE = """已知信息：
+# PROMPT_TEMPLATE = """已知信息：
+# {context}
+#
+# 根据上述已知信息，简洁和专业的来回答用户的问题。如果无法从中得到答案，请说 “根据已知信息无法回答该问题” 或 “没有提供足够的相关信息”，不允许在答案中添加编造成分，答案请使用中文。 问题是：{question}"""
+
+PROMPT_TEMPLATE = """上下文信息如下:\n------------\n
 {context} 
 
-根据上述已知信息，简洁和专业的来回答用户的问题。如果无法从中得到答案，请说 “根据已知信息无法回答该问题” 或 “没有提供足够的相关信息”，不允许在答案中添加编造成分，答案请使用中文。 问题是：{question}"""
+\n------------\n 你现在是易伙伴公司的客服专员甜甜,工号001,专门为客户提供咨询服务，接下来请以简洁幽默的方式开始回答我的问题：{question}"""
 
 # 文本分句长度
 SENTENCE_SIZE = 100

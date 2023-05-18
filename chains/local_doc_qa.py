@@ -236,7 +236,8 @@ class LocalDocQA:
         related_docs_with_score = vector_store.similarity_search_with_score(query, k=self.top_k)
         torch_gc()
         prompt = generate_prompt(related_docs_with_score, query)
-
+        print(f"输出提示：{prompt}")
+        print(f"输出历史数据：{chat_history}")
         for result, history in self.llm._call(prompt=prompt,
                                               history=chat_history,
                                               streaming=streaming):
