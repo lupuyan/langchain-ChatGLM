@@ -49,7 +49,8 @@ def auto_configure_device_map(num_gpus: int, use_lora: bool) -> Dict[str, int]:
 
 
 class ChatGLM(LLM):
-    max_token: int = 10000
+    # max_token: int = 10000
+    max_token: int = 2048
     temperature: float = 0.8
     top_p = 0.9
     # history = []
@@ -72,7 +73,7 @@ class ChatGLM(LLM):
             for inum, (stream_resp, _) in enumerate(self.model.stream_chat(
                     self.tokenizer,
                     prompt,
-                    history=history[-self.history_len:-1] if self.history_len > 0 else [],
+                    history=history[-self.history_len:] if self.history_len > 0 else [],
                     max_length=self.max_token,
                     temperature=self.temperature,
                     top_p=self.top_p,
