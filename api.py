@@ -333,10 +333,13 @@ async def stream(
                 query=prompt, chat_history=chat_history, streaming=True
         ):
             data = resp["result"][last_print_len:]
+            print(f"data：{data}")
             last_print_len = len(resp["result"])
             if await request.is_disconnected():
                 break
-            yield data
+            yield {
+                "data": json.dumps({"content": data}, ensure_ascii=False)
+            }
 
     return EventSourceResponse(event_generator(history))
 

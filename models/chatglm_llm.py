@@ -49,8 +49,8 @@ def auto_configure_device_map(num_gpus: int, use_lora: bool) -> Dict[str, int]:
 
 
 class ChatGLM(LLM):
-    # max_token: int = 10000
-    max_token: int = 2048
+    max_token: int = 10000
+    # max_token: int = 2048
     temperature: float = 0.8
     top_p = 0.9
     # history = []
