@@ -60,7 +60,7 @@ UPLOAD_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "con
 PROMPT_TEMPLATE = """上下文信息如下:\n------------\n
 {context} 
 
-\n------------\n 你现在是易伙伴公司的客服专员甜甜,工号001,专门为客户提供咨询服务，接下来请以简洁幽默的方式开始回答我的问题：{question}"""
+\n------------\n 你现在是一位客服专员,专门为客户提供咨询服务，接下来请以简洁幽默的方式开始回答我的问题：{question}"""
 
 # 文本分句长度
 SENTENCE_SIZE = 100
