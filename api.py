@@ -1,25 +1,22 @@
 import argparse
-import asyncio
 import json
 import os
 import shutil
-import subprocess
-import tempfile
 from typing import List, Optional
-from sse_starlette.sse import EventSourceResponse
-from starlette.requests import Request
 
 import nltk
 import pydantic
 import uvicorn
 from fastapi import Body, FastAPI, File, Form, Query, UploadFile, WebSocket
-from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing_extensions import Annotated
+from sse_starlette.sse import EventSourceResponse
+from starlette.requests import Request
 from starlette.responses import RedirectResponse
+from typing_extensions import Annotated
+
 from chains.local_doc_qa import LocalDocQA
-from configs.model_config import (API_UPLOAD_ROOT_PATH, EMBEDDING_DEVICE,UPLOAD_ROOT_PATH,VS_ROOT_PATH,
+from configs.model_config import (EMBEDDING_DEVICE, UPLOAD_ROOT_PATH, VS_ROOT_PATH,
                                   EMBEDDING_MODEL, LLM_MODEL, NLTK_DATA_PATH,
                                   VECTOR_SEARCH_TOP_K, LLM_HISTORY_LEN, OPEN_CROSS_DOMAIN)
 
